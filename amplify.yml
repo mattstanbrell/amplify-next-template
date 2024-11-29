@@ -1,15 +1,15 @@
 version: 1
-backend:
-  phases:
-    build:
-      commands:
-        - npm ci --cache .npm --prefer-offline
-        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
 frontend:
   phases:
+    preBuild:
+      commands:
+        # install bun
+        - curl -fsSL https://bun.sh/install | bash
+        - source /root/.bashrc
+        - bun install
     build:
       commands:
-        - npm run build
+        - bun run build
   artifacts:
     baseDirectory: .next
     files:
@@ -18,4 +18,3 @@ frontend:
     paths:
       - .next/cache/**/*
       - .npm/**/*
-      - node_modules/**/*
